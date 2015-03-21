@@ -1,0 +1,26 @@
+{
+  "name": "lenses-component-list",
+  "keywords": [
+    "seed",
+    "polymer",
+    "web-components"
+  ],
+  "main": "lenses-component-list.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5.5",
+    "core-menu": "Polymer/core-menu",
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^2.0.0"
+  },
+  "homepage": "https://github.com/lenses/lenses-component-list",
+  "_release": "f97cd2508b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "f97cd2508b0b07eaace7d0ba644eaafb880084d0"
+  },
+  "_source": "git://github.com/lenses/lenses-component-list.git",
+  "_target": "*",
+  "_originalSource": "lenses/lenses-component-list"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "olos-component-list",
+  "version": "0.0.0",
+  "keywords": [
+    "seed",
+    "polymer",
+    "web-components"
+  ],
+  "main": "lenses-component-list.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5.1",
+    "core-menu": "Polymer/core-menu",
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^2.0.0"
+  }
+}
+
+
+
+
