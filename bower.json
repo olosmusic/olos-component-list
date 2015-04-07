@@ -8,14 +8,10 @@
   ],
   "main": "lenses-component-list.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.5.1",
-    "core-menu": "Polymer/core-menu",
+    "polymer": "Polymer/polymer#^0.5.5",
+    "core-menu": "Polymer/core-menu"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^2.0.0"
   }
 }
-
-
-
-

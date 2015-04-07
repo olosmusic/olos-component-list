@@ -1,0 +1,170 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-menu/core-menu.html">
+<link rel="import" href="../core-menu/core-submenu.html">
+<link rel="import" href="../core-icon-button/core-icon-button.html">
+<link rel="import" href="../core-icons/core-icons.html">
+<link rel="import" href="../core-icons/image-icons.html">
+
+
+<!--
+
+##### Example
+
+<<<<<<< HEAD
+    <olos-component-list></olos-component-list>
+
+@element olos-component-list
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@homepage http://olos.github.io/olos-component-list
+-->
+<polymer-element name="olos-component-list" attributes="componentList">
+
+  <template>
+
+    <link rel="stylesheet" href="olos-component-list.css" />
+    <link rel="stylesheet" href="colors.css" />
+
+<!--
+    <template if="{{componentList.length>0}}">
+        <core-menu id="component-list">
+          <template repeat="{{component in componentList}}">
+            <core-item class="{{component.name}}" on-dragStart="{{dragStartList}}"  draggable="true" label="{{component.friendly || component.name}}"></core-item>
+          </template>
+        </core-menu>
+      </template>
+  -->
+
+    <template if="{{_sortedComponentList.length>0}}">
+        <core-menu id="component-list">
+          <template repeat="{{category in _sortedComponentList}}">
+            <core-submenu icon="expand-more" label="{{category.name}}">
+              <template repeat="{{component in category.components}}">
+                <core-item class="{{component.name}} {{component.category}}" on-dragStart="{{dragStartList}}"  draggable="true" label="{{component.friendly || component.name}}"></core-item>
+              </template>
+            </core-submenu>
+          </template>
+        </core-menu>
+      </template>
+
+
+  </template>
+
+  <script>
+
+    Polymer({
+      /**
+       * Main categories for the menu. Anything other than categories here will be after the main categories in the list
+       * @type {Array}
+       */
+      mainCategories: ['source', 'control', 'visualize', 'filter'], // 'environment', 
+
+      componentList: [
+
+                        {name:'olos-oscillator', friendly:'Oscillator', category:'source'},
+                        {name:'olos-matrix', friendly:'Matrix', category:'control'},
+                        {name:'olos-envelope', friendly:'Envelope', category:'control'},
+                        {name:'olos-gain', friendly:'Gain', category:'filter'},
+                        {name:'olos-destination', friendly:'Destination', category:'environment'},
+                        {name:'olos-delay', friendly:'Delay', category:'filter'},
+                        {name:'olos-analyser', friendly:'oscilloscope', category:'visualize'},
+                        {name:'olos-p5-editor', friendly:'p5-Editor', category:'visualize'},
+                        {name:'olos-p5scope', friendly:'p5-Scope', category:'visualize'},
+
+                        {name:'olos-soundfile', friendly:'Soundfile', category:'source'},
+                        {name:'olos-signal-math', friendly:'Scale Signal ~', category:'filter'}
+                       ],
+        /**
+         * Component list orderes by category
+         * @type {Array}
+         * @example [{name: 'input', components [{name:'lens-input-csv', friendly: 'CSV Loader', category: 'input'}, ...]}, ...]
+         */
+        _sortedComponentList: [],
+        ready: function() {
+          this._sortByCategory();
+        },
+        /**
+         * DragStart event handler sets component name in dataTransfer Object
+         * @param  {[type]} e         Event
+         * @param  {[type]} detail    Details
+         * @param  {[type]} selection Selection
+         * @return {[None]}           
+         */
+        dragStartList: function(e, detail, selection) {
+          // classList[0] is element name, [1] is elementType
+          var whichCategory = this.mainCategories.indexOf(selection.classList[1]);
+          console.log(whichCategory);
+          e.dataTransfer.setData("text/plain",[selection.classList[0], whichCategory]);
+
+        },
+        /**
+         * Checks to see if the custom element is already imported. If not imports it.
+         * @param  {DOM}   element  DOM element to check
+         * @param  {Function} callback Callback function to call after done
+         */
+        checkAndImport: function(element, callback) {
+          if (element.constructor == HTMLElement) {
+            var name = element.tagName.toLowerCase();
+            //import on the fly.
+            var elInfo = this._findElementInfoByName(name);
+            var pathPrefix = '../'
+            var path = elInfo.installPath || pathPrefix+name+'/'+name+'.html';
+            Polymer.import([path], callback);
+          }
+          else {
+            callback();
+          }
+
+        },
+        /**
+         * Returns component info
+         * @return {Object} JSON element containing the element info.
+         */
+        getComponentInfo: function(tagName) {
+          return this._findElementInfoByName(tagName);
+        },
+        /**
+         * Sorts componentList by category
+         * @return {[type]} [description]
+         */
+        _sortByCategory: function() {
+          var self = this;
+
+          // create empty categoryList
+          self._sortedComponentList = self.mainCategories.map(function(item) {
+            return {name: item, components: []};
+          });
+
+          self._sortedComponentList = self.componentList.reduce(function(prev, item) {
+            var cat = item.category;
+            var category = prev.filter(function(item) {
+              return item.name === cat;
+            });
+            if(category.length==0) {
+              prev.push({name: cat, components: [item]});
+            }
+            else {
+              category[0].components.push(item);
+            }
+            return prev;
+
+          }, self._sortedComponentList);
+
+        },
+        _findElementInfoByName: function(name) {
+
+          var info = this.componentList.filter(function(item) {
+            return item.name===name;
+          })
+
+          // color is the index of the category
+          // info[0].color = this.mainCategories.indexOf(info[0].category);
+
+          return info.length>0 ? info[0] : null;
+        }
+
+    });
+
+  </script>
+
+</polymer-element>
