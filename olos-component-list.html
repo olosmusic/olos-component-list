@@ -10,7 +10,6 @@
 
 ##### Example
 
-<<<<<<< HEAD
     <olos-component-list></olos-component-list>
 
 @element olos-component-list
@@ -38,9 +37,11 @@
     <template if="{{_sortedComponentList.length>0}}">
         <core-menu id="component-list">
           <template repeat="{{category in _sortedComponentList}}">
-            <core-submenu icon="expand-more" label="{{category.name}}">
-              <template repeat="{{component in category.components}}">
-                <core-item class="{{component.name}} {{component.category}}" on-dragStart="{{dragStartList}}"  draggable="true" label="{{component.friendly || component.name}}"></core-item>
+            <template if="{{category | isMainCat}}">
+              <core-submenu icon="expand-more" label="{{category.name}}">
+                <template repeat="{{component in category.components}}">
+                  <core-item class="{{component.name}} {{component.category}}" on-dragStart="{{dragStartList}}"  draggable="true" label="{{component.friendly || component.name}}"></core-item>
+                </template>
               </template>
             </core-submenu>
           </template>
@@ -52,27 +53,49 @@
 
   <script>
 
+    // only list mainCategories
+    PolymerExpressions.prototype.isMainCat = function(obj) {
+      var i = obj.name.length > 1 ? true : false;
+      if (i){
+        return obj;
+      }
+    };
+
     Polymer({
+
       /**
        * Main categories for the menu. Anything other than categories here will be after the main categories in the list
-       * @type {Array}
+       *
+       *  @property mainCategories
+       *  @type {Array}
        */
-      mainCategories: ['source', 'control', 'visualize', 'filter'], // 'environment', 
+      mainCategories: ['source', 'control', 'visualize', 'filter'],
 
       componentList: [
 
                         {name:'olos-oscillator', friendly:'Oscillator', category:'source'},
                         {name:'olos-matrix', friendly:'Matrix', category:'control'},
                         {name:'olos-envelope', friendly:'Envelope', category:'control'},
+                        // {name:'olos-piano', friendly:'Keyboard', category:'control'},
+
                         {name:'olos-gain', friendly:'Gain', category:'filter'},
-                        {name:'olos-destination', friendly:'Destination', category:'environment'},
                         {name:'olos-delay', friendly:'Delay', category:'filter'},
                         {name:'olos-analyser', friendly:'oscilloscope', category:'visualize'},
-                        {name:'olos-p5-editor', friendly:'p5-Editor', category:'visualize'},
-                        {name:'olos-p5scope', friendly:'p5-Scope', category:'visualize'},
+                        // {name:'p5-element', friendly:'p5 sketch', category:'visualize'},
+                        {name:'olos-eq', friendly:'eq', category:'filter'},
+                        {name:'olos-convolver', friendly:'Convolver', category:'filter'},
+
+                        // {name:'olos-p5-editor', friendly:'p5-Editor', category:'visualize'},
+                        // {name:'olos-p5scope', friendly:'p5 viz', category:'visualize'},
+                        {name:'olos-spectrograph', friendly:'Spectrograph', category:'visualize'},
 
                         {name:'olos-soundfile', friendly:'Soundfile', category:'source'},
-                        {name:'olos-signal-math', friendly:'Scale Signal ~', category:'filter'}
+                        {name:'olos-sampler', friendly:'Sampler', category:'source'},
+                        // {name:'olos-signal-math', friendly:'Scale Signal ~', category:'filter'},
+                        {name:'olos-waveshaper', friendly:'WaveShaper', category:'filter'},
+
+                        {name:'olos-destination', friendly:'', category:''},
+
                        ],
         /**
          * Component list orderes by category
@@ -93,7 +116,6 @@
         dragStartList: function(e, detail, selection) {
           // classList[0] is element name, [1] is elementType
           var whichCategory = this.mainCategories.indexOf(selection.classList[1]);
-          console.log(whichCategory);
           e.dataTransfer.setData("text/plain",[selection.classList[0], whichCategory]);
 
         },

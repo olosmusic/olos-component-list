@@ -6,10 +6,23 @@
     "polymer",
     "web-components"
   ],
-  "main": "lenses-component-list.html",
+  "main": "olos-component-list.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^0.5.5",
-    "core-menu": "Polymer/core-menu"
+    "core-menu": "Polymer/core-menu",
+    "olos-oscillator": "olosmusic/olos-oscillator#master",
+    "olos-matrix": "olosmusic/olos-matrix#master",
+    "olos-envelope": "olosmusic/olos-envelope#master",
+    "olos-piano": "olosmusic/olos-piano#master",
+    "olos-gain": "olosmusic/olos-gain#master",
+    "olos-delay": "olosmusic/olos-delay#master",
+    "olos-eq": "olosmusic/olos-eq#master",
+    "olos-convolver": "olosmusic/olos-convolver#master",
+    "olos-spectrogram": "olosmusic/olos-spectrogram#master",
+    "olos-soundfile": "olosmusic/olos-soundfile#master",
+    "olos-signal-math": "olosmusic/olos-signal-math#master",
+    "olos-waveshaper": "olosmusic/olos-waveshaper#master",
+    "olos-destination": "olosmusic/olos-destination#master"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^2.0.0"
