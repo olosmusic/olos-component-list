@@ -1,6 +1,6 @@
-	:host {
-	  display: block;
-	}
+  :host {
+    display: block;
+  }
 
   #component-list {
     /*
@@ -14,12 +14,41 @@
     box-sizing: border-box;
   }
 
-  #component-list core-item {
-    font-size: 12px;
-    padding: 0px 10px;
+  paper-item {
+    display: block; 
     cursor: pointer;
   }
 
-  #component-list core-item:hover {
-    background-color: #eee;
+  paper-item:hover {
   }
+  .component-item {
+    margin: 5px 0 5px 30px;
+
+  }
+  .component-item .abrv {
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 5px;
+    /*font-size: 1.2em;*/
+    border: 1px solid #AAA;
+    width: 33px;
+    height: 32px;
+    text-align: center;
+    line-height: 30px;
+    color: #444;
+    font-family: open-sans, sans-serif;
+    display: inline-block;
+   }
+   .category {
+    font-size: 18px;
+   }
+   .category::before {
+    content: '\02C3';
+    margin-right: 5px;
+    font-size: 20px;
+    display: inline-block;
+    vertical-align: bottom;
+    width: 10px;
+    padding: 0 7px;
+    height: 15px;
+   }
