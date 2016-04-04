@@ -5,24 +5,34 @@
 <link rel="import" href="../iron-icons/image-icons.html">
 
 <link rel="import" href="../olos-soundfile/olos-soundfile.html">
+<link rel="import" href="../olos-sampler/olos-sampler.html">
+
+<link rel="import" href="../olos-oscillator/olos-oscillator.html">
+<link rel="import" href="../olos-analyser/olos-analyser.html">
+<link rel="import" href="../olos-spectrograph/olos-spectrograph.html">
+
+<link rel="import" href="../olos-eq/olos-eq.html">
+<link rel="import" href="../olos-gain/olos-gain.html">
+<link rel="import" href="../olos-delay/olos-delay.html">
+<link rel="import" href="../olos-waveshaper/olos-waveshaper.html">
+<link rel="import" href="../olos-convolver/olos-convolver.html">
+
+
+<link rel="import" href="../olos-matrix/olos-matrix.html">
+<link rel="import" href="../olos-envelope/olos-envelope.html">
 
 <!--
-Element providing solution to no problem in particular.
+A list of olos components, fork of lens-component-list
 
 ##### Example
 
-    <lenses-component-list></lenses-component-list>
-
-@element lenses-component-list
-@blurb Element providing solution to no problem in particular.
-@status alpha
-@homepage http://polymerlabs.github.io/lenses-component-list
+    <olos-component-list></olos-component-list>
 -->
 <dom-module id="olos-component-list" attributes="componentList">
 
   <template>
 
-    <link rel="stylesheet" href="olos-component-list.css" />
+    <link rel="stylesheet" type="text/css" href="olos-component-list.css" />
 <!--
     <template if="{{componentList.length>0}}">
         <iron-menu-behavior id="component-list">
@@ -40,17 +50,14 @@ Element providing solution to no problem in particular.
     
           <template is="dom-repeat" items="{{_sortedComponentList}}" as="category">
 
-            <paper-item class="category" on-click="toggleCategory" __data="{{category.name}}">{{category.name}}</paper-item>
-
+            <paper-item class="category" class$="{{ catColorFromCat(category.name) }}" on-click="toggleCategory" __data="{{category.name}}">{{category.name}}</paper-item>
             <iron-collapse id="{{category.name}}">
-        
               <iron-menu-behavior icon="expand-more" label="{{category.name}}">
       
-      
                 <template is="dom-repeat" items="{{category.components}}" as="component">
-                  <paper-item component-name$="{{component.name}}" class="component-item" on-dragStart="dragStartList"  draggable="true" >
+                  <paper-item component-name$="{{component.name}}" class="component-item" on-mouseover="mouseOver" on-dragStart="dragStartList"  draggable="true" >
 
-                  <span class="abrv">{{component.abrv}}</span><span class="desc">{{ getFriendlyName(component)}}</span>
+                  <span class="abrv" class$="{{abrvColorFromCat(component.category)}}">{{component.abrv}}</span><span class="desc">{{ getFriendlyName(component)}}</span>
                  
                   </paper-item>
                 
@@ -87,7 +94,74 @@ Element providing solution to no problem in particular.
                         {
                           name: 'olos-soundfile',
                           friendly: 'Soundfile',
+                          abrv: 'sf1',
                           category: 'source'
+                        },
+                        {
+                          name: 'olos-sampler',
+                          friendly: 'Sampler',
+                          abrv: 'smp',
+                          category: 'source'
+                        },
+                        {
+                          name: 'olos-oscillator',
+                          friendly: 'Oscillator',
+                          abrv: 'osc',
+                          category: 'source'
+                        },
+                        {
+                          name: 'olos-analyser',
+                          friendly: 'Oscilloscope',
+                          abrv: 'osi',
+                          category: 'visualize'
+                        },
+                        {
+                          name: 'olos-spectrograph',
+                          friendly: 'Spectrograph',
+                          abrv: 'spc',
+                          category: 'visualize'
+                        },
+                        {
+                          name: 'olos-eq',
+                          friendly: 'EQ Filter',
+                          abrv: "eq",
+                          category: 'filter'
+                        },
+                        {
+                          name: 'olos-gain',
+                          friendly: 'Gain',
+                          abrv: 'vol',
+                          category: 'filter'
+                        },
+                        {
+                          name: 'olos-delay',
+                          friendly: 'Delay',
+                          abrv: 'dly',
+                          category: 'filter'
+                        },
+                        {
+                          name: 'olos-waveshaper',
+                          friendly: 'Waveshaper',
+                          abrv: 'wvs',
+                          category: 'filter'
+                        },
+                        {
+                          name: 'olos-convolver',
+                          friendly: 'Convolver',
+                          abrv: 'cnv',
+                          category: 'filter'
+                        },
+                        {
+                          name: 'olos-matrix',
+                          friendly: 'Matrix',
+                          abrv: 'mtx',
+                          category: 'control'
+                        },
+                        {
+                          name: 'olos-envelope',
+                          friendly: 'Envelope',
+                          abrv: 'env',
+                          category: 'control'
                         }
                       ],
         /**
@@ -108,11 +182,11 @@ Element providing solution to no problem in particular.
          * @return {[None]}           
          */
         dragStartList: function(e) {
-           e.dataTransfer.setData("text/plain", e.srcElement.getAttribute('component-name')); // e.srcElement.classList[0]);
+           e.dataTransfer.setData("text/plain", e.target.getAttribute('component-name')); // e.target.classList[0]);
 
         },
         toggleCategory: function(e) {
-          var id = e.srcElement.__data;
+          var id = e.target.__data;
           //todo cache
           var collapse = Polymer.dom(this.root).querySelector('#'+id);
           collapse.toggle();
@@ -181,14 +255,47 @@ Element providing solution to no problem in particular.
 
           }, self._sortedComponentList);
 
-          console.log('list',self._sortedComponentList);
-
         },
         _findElementInfoByName: function(name) {
           var info = this.componentList.filter(function(item) {
             return item.name===name;
           })
           return info.length>0 ? info[0] : null;
+        },
+        getColor: function(component) {
+          return this.getColorFromCat(component.category);
+        },
+        getColorFromCat: function(cat) {
+          switch(cat){
+            case 'visualize':
+              return 'color-secondary-1-2';
+            case 'filter':
+              return 'color-secondary-2-4';
+            case 'source':
+              return 'color-primary-0';
+            case 'control':
+              return 'control-color';
+            default:
+              return '';
+              break;
+          }
+        },
+        catColorFromCat: function(cat) {
+          return 'category ' + this.getColorFromCat(cat);
+        },
+        abrvColorFromCat: function(cat) {
+          return 'abrv ' + this.getColorFromCat(cat);
+        },
+
+        getCategory: function(eltName) {
+          var c = this.componentList.filter(function(item) {
+            return item.name === eltName;
+          });
+          console.log(c);
+          return c[0].category;
+        },
+        mouseOver: function(e) {
+          // console.log(e);
         }
 
     });

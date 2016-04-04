@@ -8,9 +8,6 @@
   ],
   "main": "olos-component-list.html",
   "dependencies": {
-    "iron-menu-behavior": "PolymerElements/iron-menu-behavior"
-  },
-  "devDependencies": {
-    "web-component-tester": "Polymer/web-component-tester#^2.0.0"
+    "iron-menu-behavior": "PolymerElements/iron-menu-behavior#^1.1.5"
   }
 }
